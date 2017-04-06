@@ -68,7 +68,9 @@ class ModulesController extends AdminBaseController
                 ->with('error', trans('workshop::modules.module cannot be disabled'));
         }
 
-        $module->disable();
+        if($module->disable()) {
+            \Cache::flush();
+        }
 
         return redirect()->route('admin.workshop.modules.show', [$module->getLowerName()])
             ->with('success', trans('workshop::modules.module disabled'));
@@ -82,7 +84,9 @@ class ModulesController extends AdminBaseController
     public function enable($module)
     {
         $module = app('modules')->get($module);
-        $module->enable();
+        if($module->enable()) {
+            \Cache::flush();
+        }
 
         return redirect()->route('admin.workshop.modules.show', [$module->getLowerName()])->with('success',
             trans('workshop::modules.module enabled'));
